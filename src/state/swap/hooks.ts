@@ -341,11 +341,17 @@ export const useSwap = (inputAmount?: CurrencyAmount): { swap: () => Promise<voi
     const amount = Web3.utils.toWei(inputAmount.toExact(), 'ether')
     try {
       if (usdt2tx8) {
-        await usdtTokenContract.approve(swapContract.address, amount)
+        const tx = await usdtTokenContract.approve(swapContract.address, amount)
+        const receipt = await tx.wait()
+        console.log('Approved', receipt)
       } else {
-        await tx8TokenContract.approve(swapContract.address, amount)
+        const tx = await tx8TokenContract.approve(swapContract.address, amount)
+        const receipt = await tx.wait()
+        console.log('Approved', receipt)
       }
-      await swapContract.swap(amount, usdt2tx8)
+      const tx = await swapContract.swap(amount, usdt2tx8)
+      const receipt = await tx.wait()
+      console.log('Swapped', receipt)
     } catch (e) {
       console.error('error ', e)
     }
